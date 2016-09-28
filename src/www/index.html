@@ -8,32 +8,6 @@
 
 	<body>
 		<main></main>
-
-		<script>
-
-			const p1 = new Promise((resolve, reject) => setTimeout(() => { console.log('She'); resolve(); }, 2000));
-			const p2 = new Promise(resolve => setTimeout(() => { console.log('walks'); resolve(); }, 3000));
-
-			const doIt = () => 'did it';
-			const doIt = function() { return 'did it' };
-
-			const doIt = msg => msg + ' did it';
-			const doIt = function(msg) { return msg + 'did it'; };
-
-			Promise.all([p1,p2]).then(function() {
-				lastOne();
-			});
-
-
-			p1.then(() => p2).then(() => { })
-
-			function lastOne() {
-				console.log('the dog.');
-			}
-
-
-		</script>
-
 	</body>
 
 </html>

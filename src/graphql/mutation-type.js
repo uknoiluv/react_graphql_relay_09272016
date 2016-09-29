@@ -64,9 +64,9 @@ export const mutationType = new GraphQLObjectType({
 					type: insertWidgetType
 				}
 			},
-			resolve: (_, { widget }) => {
+			resolve: (_, { widget }, { baseUrl }) => {
 
-				return fetch('http://localhost:3010/widgets', {
+				return fetch(`${baseUrl}/widgets`, {
 					method: 'post',
 					headers: { 'content-type': 'application/json'},
 					body: JSON.stringify(widget)

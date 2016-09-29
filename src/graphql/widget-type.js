@@ -28,8 +28,8 @@ export const widgetType = new GraphQLObjectType({
 		},
 		owner: {
 			type: ownerType,
-			resolve: ({ ownerId }) => {
-				return fetch(`http://localhost:3010/owners/${ownerId}`)
+			resolve: ({ ownerId }, _, { baseUrl }) => {
+				return fetch(`${baseUrl}/owners/${ownerId}`)
 					.then(res => res.json());
 			}
 		}

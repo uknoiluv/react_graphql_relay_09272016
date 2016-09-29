@@ -4,6 +4,7 @@ import { widgetType } from './widget-type';
 import { ownerType } from './owner-type';
 import { bookType } from './book-type';
 import { authorType } from './author-type';
+import pluralize from 'pluralize';
 
 export const queryType = new GraphQLObjectType({
 
@@ -21,7 +22,7 @@ export const queryType = new GraphQLObjectType({
 		
 		const resourceFields = widgetType => {
 			var singularTypeName = widgetType.name.toLowerCase();
-			var pluralTypeName = singularTypeName + 's';
+			var pluralTypeName = pluralize(singularTypeName);
 			return {
 				[pluralTypeName]: getAllField(widgetType, pluralTypeName),
 				[singularTypeName]: searchIdField(widgetType, pluralTypeName),

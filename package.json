@@ -69,6 +69,7 @@
     "graphql": "^0.7.0",
     "graphql-relay": "^0.4.2",
     "node-fetch": "^1.6.3",
+    "pluralize": "^3.0.0",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
     "react-relay": "^0.9.1",

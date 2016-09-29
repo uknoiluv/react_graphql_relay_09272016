@@ -1,5 +1,6 @@
 import Relay from 'react-relay';
 import { WidgetTool } from '../components/widget-tool';
+import InsertWidgetMutation from '../mutations/insert-widget-mutation';
 
 export const WidgetToolContainer = Relay.createContainer(WidgetTool, {
 
@@ -19,6 +20,7 @@ export const WidgetToolContainer = Relay.createContainer(WidgetTool, {
 						}
 					}
 				}
+				${InsertWidgetMutation.getFragment('viewer')}
 			}
 		`
 	}

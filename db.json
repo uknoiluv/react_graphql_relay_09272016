@@ -57,6 +57,14 @@
       "size": "medium",
       "quantity": 12,
       "id": 5
+    },
+    {
+      "name": "a",
+      "description": "a",
+      "color": "a",
+      "size": "a",
+      "quantity": 4,
+      "id": 6
     }
   ],
   "people": [

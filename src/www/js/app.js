@@ -46,6 +46,10 @@ class BookTable extends React.Component {
 
 class BookForm extends React.Component {
 
+	static propTypes = {
+		addBook: React.PropTypes.func
+	};
+
 	constructor(props) {
 		super(props);
 
@@ -70,6 +74,13 @@ class BookForm extends React.Component {
 
 		// add code to post the author
 
+		this.props.addBook({
+			title: this.state.bookTitle,
+			category: this.state.bookCategory,
+			price: this.state.bookPrice,
+			authorId: this.state.bookAuthorId,
+		});
+
 		this.setState({
 			bookTitle: '',
 			bookCategory: '',
@@ -83,22 +94,22 @@ class BookForm extends React.Component {
 			<div>
 				<label htmlFor="book-title">Title:</label>
 				<input type="text" id="book-title" name="bookTitle"
-					value={this.state.booKTitle} onChange={this.onChange} />
+					value={this.state.bookTitle} onChange={this.onChange} />
 			</div>
 			<div>
 				<label htmlFor="book-category">Category:</label>
 				<input type="text" id="book-category" name="bookCategory"
-					value={this.state.booKCategory} onChange={this.onChange} />
+					value={this.state.bookCategory} onChange={this.onChange} />
 			</div>
 			<div>
 				<label htmlFor="book-price">Price:</label>
 				<input type="text" id="book-price" name="bookPrice"
-					value={this.state.booKPrice} onChange={this.onChange} />
+					value={this.state.bookPrice} onChange={this.onChange} />
 			</div>
 			<div>
 				<label htmlFor="book-author-id">Author Id:</label>
 				<input type="text" id="book-author-id" name="bookAuthorId"
-					value={this.state.booKAuthorId} onChange={this.onChange} />
+					value={this.state.bookAuthorId} onChange={this.onChange} />
 			</div>
 			<button type="button" onClick={this.addBook}>Add Book</button>
 		</form>;
@@ -106,38 +117,81 @@ class BookForm extends React.Component {
 
 }
 
-class BookTool extends React.Component {
+const fetchGraphQL = req =>
+	fetch('/graphql', {
+		method: 'POST',
+		body: JSON.stringify(req),
+		headers: new Headers({ 'content-type': 'application/json' })
+	}).then(res => res.json());
 
-	static propTypes = {
-		books: booksPropType
-	}
+const getAllBooks = () =>
+	fetchGraphQL({
+		query: 'query { books { id, title, category, price, author { id, firstName, lastName } }}',
+		variables: null
+	});
+
+const insertOneBook = book => fetchGraphQL({
+	operationName: 'InsertBook',
+	query: `mutation InsertBook($book: InsertBook) {
+  
+  insertBook(book: $book) {
+    id
+    title
+    category
+    price
+  }
+  
+}`,
+	variables: { book }
+});
+
+class BookToolContainer extends React.Component {
 
 	constructor(props) {
 		super(props);
+
+		this.state = {
+			books: []
+		};
+
+		this.addBook = this.addBook.bind(this);
+	}
+
+	componentDidMount() {
+
+		getAllBooks().then(({ data }) => {
+			this.setState({
+				books: data.books
+			});
+		});
+
+	}
+
+	addBook(book) {
+
+		insertOneBook(book)
+			.then(() => getAllBooks())
+			.then(({ data }) => {
+				this.setState({
+					books: data.books
+				});
+			});	
+
 	}
 
 	render() {
 		return <div>
-			<BookTable books={this.props.books} />
-			<BookForm />
+			<BookTable books={this.state.books} />
+			<BookForm addBook={this.addBook} />
 		</div>;
 	}
 
 }
 
-const req = {
-	query: 'query { books { id, title, category, price, author { id, firstName, lastName } }}',
-	variables: null
-};
+ReactDOM.render(<BookToolContainer />, document.querySelector('main'));
 
-fetch('/graphql', {
-	method: 'POST',
-	body: JSON.stringify(req),
-	headers: new Headers({ 'content-type': 'application/json' })
-})
-	.then(res => res.json())
-	.then(({ data }) =>
-		ReactDOM.render(<BookTool books={data.books} />, document.querySelector('main')));
+
+
 
 
 

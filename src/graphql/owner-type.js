@@ -3,7 +3,7 @@ import {
 	GraphQLID, GraphQLList
 } from 'graphql';
 import { widgetType } from './widget-type';
-const fetch = require('node-fetch');
+import { getAllResources } from './resources';
 
 export const ownerType = new GraphQLObjectType({
 
@@ -17,10 +17,8 @@ export const ownerType = new GraphQLObjectType({
 		},
 		widgets: {
 			type: new GraphQLList(widgetType),
-			resolve: ({ id: ownerId }, _, { baseUrl }) => 
-				fetch(`${baseUrl}/widgets`)
-					.then(res => res.json())
-					.then(widgets => widgets.filter(w => w.ownerId === ownerId))
+			resolve: ({ id: ownerId }, _, { baseUrl }) =>
+				getAllResources(baseUrl, 'widgets', `ownerId=${ownerId}`)
 		}
 	})
 

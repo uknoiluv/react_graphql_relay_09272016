@@ -1,9 +1,6 @@
-import {
-	GraphQLObjectType, GraphQLString,
-	GraphQLID, GraphQLInt
-} from 'graphql';
+import { GraphQLObjectType, GraphQLString, GraphQLID, GraphQLInt } from 'graphql';
 import { ownerType } from './owner-type';
-const fetch = require('node-fetch');
+import { getResource } from './resources';
 
 export const widgetType = new GraphQLObjectType({
 
@@ -28,10 +25,8 @@ export const widgetType = new GraphQLObjectType({
 		},
 		owner: {
 			type: ownerType,
-			resolve: ({ ownerId }, _, { baseUrl }) => {
-				return fetch(`${baseUrl}/owners/${ownerId}`)
-					.then(res => res.json());
-			}
+			resolve: ({ ownerId }, _, { baseUrl }) =>
+				getResource(baseUrl, 'owners', ownerId)
 		}
 	})
 

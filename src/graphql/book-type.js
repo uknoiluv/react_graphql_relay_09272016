@@ -1,13 +1,12 @@
 import { GraphQLObjectType, GraphQLString, GraphQLFloat, GraphQLID } from 'graphql';
 import { authorType } from './author-type';
-import fetch from 'node-fetch';
+import { getResource } from './resources';
 
 export const bookType = new GraphQLObjectType({
 
 	name: 'Book',
 
 	fields: () => ({
-
 		id: {
 			type: GraphQLID
 		},
@@ -23,10 +22,8 @@ export const bookType = new GraphQLObjectType({
 		author: {
 			type: authorType,
 			resolve: ({ authorId }, _, { baseUrl }) =>
-				fetch(`${baseUrl}/authors/${authorId}`)
-					.then(res => res.json())
+				getResource(baseUrl, 'authors', authorId)
 		}
-
 	})
 
 });

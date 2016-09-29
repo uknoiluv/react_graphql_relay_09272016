@@ -101,6 +101,11 @@
       "id": 4,
       "firstName": "Stuart",
       "lastName": "Little"
+    },
+    {
+      "firstName": "Todd",
+      "lastName": "Smalls",
+      "id": 5
     }
   ],
   "books": [
